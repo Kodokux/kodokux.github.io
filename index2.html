@@ -32,61 +32,60 @@
     </div>
   </div>
 
-
-<div id="amazon-root"></div>
-<script type="text/javascript">
-  function getURLParameter(name, source) {
-    console.log("getURLParameter", name, source);
-    return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
-      '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
-  }
-
-  var accessToken = getURLParameter("access_token", location.href);
-  if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-    document.cookie = "amazon_Login_accessToken=" + accessToken +";secure;path=/";
-  }
-   window.onAmazonLoginReady = function() {
-    amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
-    amazon.Login.setRegion('APAC');
-    amazon.Login.setLanguage('ja_JP');
-    if (accessToken) {
-      amazon.Login.retrieveProfile(accessToken, function (response){
-        if (response.success) {
-          document.getElementById('profile').innerHTML =
-          response.profile.Name + " : " + response.profile.PostalCode
-          + "<br />"
-          + response.profile.PrimaryEmail;
-        }
-      });
+  <div id="amazon-root"></div>
+  <script type="text/javascript">
+    function getURLParameter(name, source) {
+      console.log("getURLParameter", name, source);
+      return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+        '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
     }
-  }
-</script>
-<!-- sandbox -->
-<!-- <script type='text/javascript'
-  src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?sellerId=A23YM23UEBY8FM'>
-</script> -->
-<script type='text/javascript'
-  src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
-</script>
-<script type="text/javascript">
-  var authRequest;
-  var win = OffAmazonPayments.Button("AmazonPayButton", "A23YM23UEBY8FM", {
-    type: "LwA",
-    authorization: function() {
-      loginOptions = {
-        scope: "profile postal_code",
-        response_type: 'token',
-        state: "johna:test",
-        popup: true
-      };
-      authRequest = amazon.Login.authorize (loginOptions, "/index2.html");
+
+    var accessToken = getURLParameter("access_token", location.href);
+    if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+      document.cookie = "amazon_Login_accessToken=" + accessToken +";secure;path=/";
     }
-  });
-  document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
-    amazon.Login.logout();
-    // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-    window.location.href = "/index2.html";
-  });
-</script>
+     window.onAmazonLoginReady = function() {
+      amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
+      amazon.Login.setRegion('APAC');
+      amazon.Login.setLanguage('ja_JP');
+      if (accessToken) {
+        amazon.Login.retrieveProfile(accessToken, function (response){
+          if (response.success) {
+            document.getElementById('profile').innerHTML =
+            response.profile.Name + " : " + response.profile.PostalCode
+            + "<br />"
+            + response.profile.PrimaryEmail;
+          }
+        });
+      }
+    }
+  </script>
+  <!-- sandbox -->
+  <!-- <script type='text/javascript'
+    src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?sellerId=A23YM23UEBY8FM'>
+  </script> -->
+  <script type='text/javascript'
+    src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
+  </script>
+  <script type="text/javascript">
+    var authRequest;
+    var win = OffAmazonPayments.Button("AmazonPayButton", "A23YM23UEBY8FM", {
+      type: "LwA",
+      authorization: function() {
+        loginOptions = {
+          scope: "profile postal_code",
+          response_type: 'token',
+          state: "johna:test",
+          popup: true
+        };
+        authRequest = amazon.Login.authorize (loginOptions, "/index2.html");
+      }
+    });
+    document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
+      amazon.Login.logout();
+      // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      window.location.href = "/index2.html";
+    });
+  </script>
 </body>
 </html>
