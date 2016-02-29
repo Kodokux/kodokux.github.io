@@ -13,6 +13,23 @@
   integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 </head>
 <body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 text-right">
+        <div id="AmazonPayButton"></div>
+      </div>
+      <div class="col-md-6">
+        <button type="button" name="button" id="AmazonLogoutButton" class="btn btn-danger"> Logout</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h1 id="profile"></h1>
+      </div>
+    </div>
+  </div>
+
+
 <div id="amazon-root"></div>
 <script type="text/javascript">
   function getURLParameter(name, source) {
@@ -29,8 +46,6 @@
     amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
     amazon.Login.setRegion('APAC');
     amazon.Login.setLanguage('ja_JP');
-
-    //if has accessToken retrieveProfile and set.
     if (accessToken) {
       amazon.Login.retrieveProfile(accessToken, function (response){
         if (response.success) {
@@ -41,53 +56,34 @@
         }
       });
     }
-   };
-   (function(d) {
-       var a = d.createElement('script');
-           a.type = 'text/javascript';
-           a.async = true;
-           a.id = 'amazon-login-sdk';
-           a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
-           d.getElementById('amazon-root').appendChild(a);
-   })(document);
+  }
 </script>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 text-right">
-      <a href="#" id="LoginWithAmazon">
-         <img border="0" alt="Login with Amazon"
-             src="https://images-na.ssl-images-amazon.com/images/G/01/EP/offAmazonPayments/jp/live/prod/image/lwa/gold/medium/LwA.png"
-              />
-      </a>
-    </div>
-    <div class="col-md-6">
-      <button type="button" name="button" id="AmazonLogoutButton" class="btn btn-danger"> Logout</button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12 text-center">
-      <h1 id="profile"></h1>
-    </div>
-  </div>
-</div>
-
+<!-- sandbox -->
+<!-- <script type='text/javascript'
+  src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?sellerId=A23YM23UEBY8FM'>
+</script> -->
+<script type='text/javascript'
+  src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
+</script>
 <script type="text/javascript">
-   document.getElementById('LoginWithAmazon').onclick = function() {
-       options = {
-               scope : 'profile postal_code',
-               state: "test:aaaa",
-               language:"jp",
-               interactive:"always"
-       };
-       amazon.Login.authorize(options, "/");
-       return false;
-   };
-   document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
-     amazon.Login.logout();
-     // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-     window.location.href = "/index.html";
-   });
+  var authRequest;
+  var win = OffAmazonPayments.Button("AmazonPayButton", "A23YM23UEBY8FM", {
+    type: "LwA",
+    authorization: function() {
+      loginOptions = {
+        scope: "profile postal_code",
+        response_type: 'token',
+        state: "johna:test",
+        popup: true
+      };
+      authRequest = amazon.Login.authorize (loginOptions, "/index2.html");
+    }
+  });
+  document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
+    amazon.Login.logout();
+    // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    window.location.href = "/index2.html";
+  });
 </script>
 </body>
 </html>
