@@ -24,6 +24,7 @@
     if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
       document.cookie = "amazon_Login_accessToken=" + accessToken +";secure";
     }
+    
      window.onAmazonLoginReady = function() {
       amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
       amazon.Login.setRegion('APAC');
