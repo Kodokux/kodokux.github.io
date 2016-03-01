@@ -19,14 +19,16 @@
         '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
     }
 
-    var accessToken = getURLParameter("access_token", location.href);
+    var accessToken = getURLParameter("access_token", location.hash);
+    console.log('accessToken', accessToken);
     if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-      document.cookie = "amazon_Login_accessToken=" + accessToken +";secure;path=/";
+      document.cookie = "amazon_Login_accessToken=" + accessToken +";secure";
     }
      window.onAmazonLoginReady = function() {
       amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
       amazon.Login.setRegion('APAC');
       amazon.Login.setLanguage('ja_JP');
+      amazon.Login.setUseCookie(true);
       if (accessToken) {
         amazon.Login.retrieveProfile(accessToken, function (response){
           if (response.success) {
@@ -61,6 +63,7 @@
         </div>
         <div class="row">
           <div class="col-md-12 text-center">
+            <input type="checkbox" name="name" id="popupFlg" value="1" checked="checked"> popup flg
             <p>amazon.Login.retrieveProfile</p>
             <h4 id="profile"></h4>
             <h4>OrderReferenceId <span id='orderReferenceId'></span></h4>
@@ -117,11 +120,12 @@
     var win = OffAmazonPayments.Button("AmazonPayButton", "A23YM23UEBY8FM", {
       type: "LwA",
       authorization: function() {
+        var flg = document.getElementById("popupFlg").checked;
         loginOptions = {
           scope: "profile postal_code",
           response_type: 'token',
           state: "johna:test",
-          popup: true
+          popup: flg
         };
         authRequest = amazon.Login.authorize (loginOptions, "/index3.html");
       }
