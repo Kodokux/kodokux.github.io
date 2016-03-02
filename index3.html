@@ -20,11 +20,13 @@
     }
 
     var accessToken = getURLParameter("access_token", location.hash);
-    console.log('accessToken', accessToken);
     if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+      console.log('set cookie');
       document.cookie = "amazon_Login_accessToken=" + accessToken +";secure";
+    } else {
+      accessToken = getURLParameter("access_token", location.href);
     }
-    
+
      window.onAmazonLoginReady = function() {
       amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
       amazon.Login.setRegion('APAC');
