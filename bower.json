@@ -1,0 +1,24 @@
+{
+  "name": "kodokux.github.io",
+  "description": "",
+  "main": "index.html",
+  "authors": [
+    "Johnathan David <johnathan@kodokuman.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Kodokux/kodokux.github.io",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#^1.5.0",
+    "angular-ui-router": "^0.2.18",
+    "bootstrap": "^3.3.6",
+    "angular-route": "^1.5.0"
+  }
+}

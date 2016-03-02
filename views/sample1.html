@@ -1,0 +1,87 @@
+  <div id="amazon-root"></div>
+  <script type="text/javascript">
+    function getURLParameter(name, source) {
+      return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+        '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+    }
+
+    var accessToken = getURLParameter("access_token", location.href);
+    if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+      document.cookie = "amazon_Login_accessToken=" + accessToken +";secure;path=/";
+    }
+     window.onAmazonLoginReady = function() {
+      // my seller central id
+      // amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
+
+      //my .com seller central id
+      amazon.Login.setClientId('amzn1.application-oa2-client.7c5ace4d071549cfb42a5d1a99a4c829');
+
+      //yamato seller central id
+      // amazon.Login.setClientId('amzn1.application-oa2-client.b248e7188ced40dfb29d160fff6f6772');
+      // amazon.Login.setRegion('APAC');
+      amazon.Login.setLanguage('ja_JP');
+
+      //if has accessToken retrieveProfile and set.
+      if (accessToken) {
+        amazon.Login.retrieveProfile(accessToken, function (response){
+          if (response.success) {
+            document.getElementById('profile').innerHTML =
+            response.profile.Name + " : " + response.profile.PostalCode
+            + "<br />"
+            + response.profile.PrimaryEmail;
+          }
+        });
+      }
+     };
+     (function(d) {
+         var a = d.createElement('script');
+             a.type = 'text/javascript';
+             a.async = true;
+             a.id = 'amazon-login-sdk';
+             a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
+             d.getElementById('amazon-root').appendChild(a);
+     })(document);
+  </script>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h2>Example with original button</h2>
+      <div class="row">
+        <div class="col-md-6 text-right">
+          <a href="#" id="LoginWithAmazon">
+             <img border="0" alt="Login with Amazon"
+                 src="https://images-na.ssl-images-amazon.com/images/G/01/EP/offAmazonPayments/jp/live/prod/image/lwa/gold/medium/LwA.png"
+                  />
+          </a>
+        </div>
+        <div class="col-md-6">
+          <button type="button" name="button" id="AmazonLogoutButton" class="btn btn-danger"> Logout</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h4 id="profile"></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+     document.getElementById('LoginWithAmazon').onclick = function() {
+         options = {
+                 scope : 'profile postal_code',
+                 state: "test:aaaa",
+                 language:"jp",
+                 interactive:"always"
+         };
+         amazon.Login.authorize(options, "/");
+         return false;
+     };
+     document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
+       amazon.Login.logout();
+       // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+       window.location.href = "/index.html";
+     });
+  </script>
+</body>
+</html>

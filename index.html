@@ -1,96 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Login with Amazon</title>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-  integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <title>Test</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
-<body>
-  <div id="amazon-root"></div>
-  <script type="text/javascript">
-    function getURLParameter(name, source) {
-      console.log("getURLParameter", name, source);
-      return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
-        '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
-    }
 
-    var accessToken = getURLParameter("access_token", location.href);
-    if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-      document.cookie = "amazon_Login_accessToken=" + accessToken +";secure;path=/";
-    }
-     window.onAmazonLoginReady = function() {
-      amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
-      amazon.Login.setRegion('APAC');
-      amazon.Login.setLanguage('ja_JP');
+<body ng-app="MainApp">
 
-      //if has accessToken retrieveProfile and set.
-      if (accessToken) {
-        amazon.Login.retrieveProfile(accessToken, function (response){
-          if (response.success) {
-            document.getElementById('profile').innerHTML =
-            response.profile.Name + " : " + response.profile.PostalCode
-            + "<br />"
-            + response.profile.PrimaryEmail;
-          }
-        });
-      }
-     };
-     (function(d) {
-         var a = d.createElement('script');
-             a.type = 'text/javascript';
-             a.async = true;
-             a.id = 'amazon-login-sdk';
-             a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
-             d.getElementById('amazon-root').appendChild(a);
-     })(document);
-  </script>
+    <div id="wrapper" ng-controller="MainCtrl">
 
-  <div class="container">
-    <div class="jumbotron">
-      <h2>Example with original button</h2>
-      <div class="row">
-        <div class="col-md-6 text-right">
-          <a href="#" id="LoginWithAmazon">
-             <img border="0" alt="Login with Amazon"
-                 src="https://images-na.ssl-images-amazon.com/images/G/01/EP/offAmazonPayments/jp/live/prod/image/lwa/gold/medium/LwA.png"
-                  />
-          </a>
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" style="display:block;">
+                        Amazon <span class="font-thin-orange">Payments</span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-href="#/">Dashboard</a>
+                </li>
+                <li>
+                    <a ng-href="#/sample1">Sample1</a>
+                </li>
+                <li>
+                    <a ng-href="#/sample2">Sample2</a>
+                </li>
+                <li>
+                    <a ng-href="#/sample3">Sample3</a>
+                </li>
+            </ul>
         </div>
-        <div class="col-md-6">
-          <button type="button" name="button" id="AmazonLogoutButton" class="btn btn-danger"> Logout</button>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+              <h1>sfdsfsdf</h1>
+              <div ng-view></div>
+            </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <h4 id="profile"></h4>
-        </div>
-      </div>
     </div>
-  </div>
+    <!-- /#wrapper -->
 
-  <script type="text/javascript">
-     document.getElementById('LoginWithAmazon').onclick = function() {
-         options = {
-                 scope : 'profile postal_code',
-                 state: "test:aaaa",
-                 language:"jp",
-                 interactive:"always"
-         };
-         amazon.Login.authorize(options, "/");
-         return false;
-     };
-     document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
-       amazon.Login.logout();
-       // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-       window.location.href = "/index.html";
-     });
-  </script>
+    <!-- angularjs -->
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="js/app.js"></script>
+    <!-- jQuery -->
+    <!-- <script src="js/jquery.js"></script> -->
+
+    <!-- Bootstrap Core JavaScript -->
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+
+    <!-- Menu Toggle Script -->
+    <script>
+    // $("#menu-toggle").click(function(e) {
+    //     e.preventDefault();
+    //     $("#wrapper").toggleClass("toggled");
+    // });
+    </script>
+
 </body>
+
 </html>
