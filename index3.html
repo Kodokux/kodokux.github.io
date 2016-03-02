@@ -21,7 +21,6 @@
 
     var accessToken = getURLParameter("access_token", location.hash);
     if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-      console.log('set cookie');
       document.cookie = "amazon_Login_accessToken=" + accessToken +";secure";
     } else {
       accessToken = getURLParameter("access_token", location.href);
