@@ -33,4 +33,23 @@ mainApp.config(
   .controller('DashboardCtrl', function() {
   })
   .controller('Sample1Ctrl', function() {
+  })
+
+
+  
+  .directive('highlight', function($interpolate, $window){
+      return {
+      restrict: 'EA',
+      scope: true,
+      compile: function (tElem, tAttrs) {
+        var interpolateFn = $interpolate(tElem.html(), true);
+        tElem.html(''); // stop automatic intepolation
+
+        return function(scope, elem, attrs){
+          scope.$watch(interpolateFn, function (value) {
+            elem.html(hljs.highlight('javascript',value).value);
+          });
+        }
+      }
+    };
   });
