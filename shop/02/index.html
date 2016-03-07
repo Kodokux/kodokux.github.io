@@ -108,6 +108,10 @@
                   // your error handling code
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());
+                  if (error.getErrorCode() == 'BuyerSessionExpired') {
+                    console.log('logout');
+                    amazon.Login.logout();
+                  }
                 }
               }).bind("addressBookWidgetDiv");
             </script>
@@ -126,6 +130,10 @@
                   // your error handling code
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());
+                  if (error.getErrorCode() == 'BuyerSessionExpired') {
+                    console.log('logout');
+                    amazon.Login.logout();
+                  }
                 }
                 }).bind("walletWidgetDiv");
             </script>
