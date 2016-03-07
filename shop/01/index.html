@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>アドレス帳、お支払い方法 | アマゾンペイメント、サンプルプログラム | Amazon Payments</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+  integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+  <script type="text/javascript">
+    var client_id = 'amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca';
+    var seller_id = 'A23YM23UEBY8FM';
+    function getURLParameter(name, source) {
+      console.log("getURLParameter", name, source);
+      return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+        '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+    }
+
+    var accessToken = getURLParameter("access_token", location.hash);
+    if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+      document.cookie = "amazon_Login_accessToken=" + accessToken +";secure";
+    } else {
+      accessToken = getURLParameter("access_token", location.href);
+    }
+
+     window.onAmazonLoginReady = function() {
+      amazon.Login.setClientId(client_id);
+      amazon.Login.setRegion('APAC');
+      amazon.Login.setLanguage('ja_JP');
+      amazon.Login.setUseCookie(true);
+      if (accessToken) {
+        amazon.Login.retrieveProfile(accessToken, function (response){
+          if (response.success) {
+            document.getElementById('profile').innerHTML =
+            response.profile.Name + " : " + response.profile.PostalCode
+            + "<br />"
+            + response.profile.PrimaryEmail;
+          }
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+      document.getElementById('client_id').innerHTML = client_id;
+      document.getElementById('seller_id').innerHTML = seller_id;
+    });
+  </script>
+</head>
+<body>
+  <!-- sandbox -->
+  <script type='text/javascript'
+    src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?sellerId=A23YM23UEBY8FM'>
+  </script>
+  <!-- <script type='text/javascript'
+    src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
+  </script> -->
+  <div class="container">
+    <div class="jumbotron">
+        <h2 class="text-center">アマゾンペイメント、サンプルプログラム</h2>
+        <p>one SSL 複数ショップのテスト</p>
+        <div class="row">
+          <div class="col-md-6 text-right">
+            <h5>Client ID : <span id='client_id'></span></h5>
+          </div>
+          <div class="col-md-6">
+            <h5>Seller ID : <span id='seller_id'></span></h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 text-right">
+            <div id="AmazonPayButton"></div>
+          </div>
+          <div class="col-md-6">
+            <button type="button" name="button" id="AmazonLogoutButton" class="btn btn-danger"> Logout</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <input type="checkbox" name="name" id="popupFlg" value="1" checked="checked"> popup flg
+            <p>amazon.Login.retrieveProfile</p>
+            <h4 id="profile"></h4>
+            <h4>OrderReferenceId <span id='orderReferenceId'></span></h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div id="addressBookWidgetDiv" style="height:200px"></div>
+            <script type="text/javascript">
+                new OffAmazonPayments.Widgets.AddressBook({
+                  sellerId: "A23YM23UEBY8FM",
+                onOrderReferenceCreate: function (orderReference) {
+                  document.getElementById('orderReferenceId').innerHTML =
+                 orderReference.getAmazonOrderReferenceId();
+                },
+                onAddressSelect: function (orderReference) {
+                  console.log("onAddressSelect:orderReference", orderReference)
+                },
+                design: {
+                    designMode: 'responsive'
+                },
+                onError: function (error) {
+                  // your error handling code
+                  console.log(error.getErrorCode());
+                  console.log(error.getErrorMessage());
+                }
+              }).bind("addressBookWidgetDiv");
+            </script>
+          </div>
+          <div class="col-md-6">
+            <div id="walletWidgetDiv" style="height:200px" ng-show="orderReferenceId"></div>
+            <script type="text/javascript">
+              new OffAmazonPayments.Widgets.Wallet({
+                sellerId: seller_id,
+                onPaymentSelect: function (orderReference) {
+                },
+                design: {
+                    designMode: 'responsive'
+                },
+                onError: function (error) {
+                  // your error handling code
+                  console.log(error.getErrorCode());
+                  console.log(error.getErrorMessage());
+                }
+                }).bind("walletWidgetDiv");
+            </script>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var authRequest;
+    var win = OffAmazonPayments.Button("AmazonPayButton", seller_id, {
+      type: "LwA",
+      authorization: function() {
+        var flg = document.getElementById("popupFlg").checked;
+        loginOptions = {
+          scope: "profile postal_code",
+          response_type: 'token',
+          state: "johna:test",
+          popup: flg
+        };
+        authRequest = amazon.Login.authorize (loginOptions, "/shop/01/index.html");
+      }
+    });
+    document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
+      amazon.Login.logout();
+      // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      window.location.href = "/shop/01/index.html";
+    });
+  </script>
+</body>
+</html>
