@@ -143,6 +143,7 @@
           scope: "profile postal_code",
           response_type: 'token',
           state: "path=/shop/01",
+          interactive: 'always',
           popup: flg
         };
         authRequest = amazon.Login.authorize (loginOptions, "/shop/callback.html");
