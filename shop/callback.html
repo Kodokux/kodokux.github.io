@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Callback処理</title>
+  <script src="/js/my.js" charset="utf-8"></script>
   <script>
   function getURLParameter(name, source) {
     console.log("getURLParameter", name, source);
@@ -13,6 +14,7 @@
   var accessToken = getURLParameter("access_token", location.hash);
   var state = getURLParameter("state", location.hash);
   var path = getURLParameter("path", '#' + state);
+  var client_id = getURLParameter("client_id", '#' + state);
 
   if (typeof path !== 'string') {
     path = '/';
@@ -20,15 +22,20 @@
 
   var newURL = '';
   if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-    document.cookie = "amazon_Login_accessToken=" + accessToken +";path=/";
     console.log('path', path, "amazon_Login_accessToken=" + accessToken +";path="+path+";secure");
-    //location.href = path;
-    newURL = "https://" + window.location.host + path;
+    if (client_id) {
+      setCookie('client_id', client_id);
+    }
+    newURL = location.protocol + "//" + window.location.host + path;
     console.log("newURL", newURL);
-  //  window.location.replace(newURL);
   } else {
     accessToken = getURLParameter("access_token", location.href);
   }
+
+  if (accessToken) {
+    document.cookie = "amazon_Login_accessToken=" + accessToken +";path=/;secure";
+  }
+
   function goto() {
     window.location.replace(newURL);
   }

@@ -11,29 +11,27 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
   integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
+  <script src="/js/my.js" charset="utf-8"></script>
   <script type="text/javascript">
     var client_id = 'amzn1.application-oa2-client.be0a91696bcc4e16bc176017f520dcf3';
     var seller_id = 'A23YM23UEBY8FM';
-    function getURLParameter(name, source) {
-      console.log("getURLParameter", name, source);
-      return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
-        '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
-    }
-
-    var accessToken = getURLParameter("access_token", location.hash);
-    if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-      document.cookie = "amazon_Login_accessToken=" + accessToken +";secure";
-    } else {
-      accessToken = getURLParameter("access_token", location.href);
-    }
-
 
      window.onAmazonLoginReady = function() {
       amazon.Login.setClientId(client_id);
       amazon.Login.setRegion('APAC');
       amazon.Login.setLanguage('ja_JP');
       amazon.Login.setUseCookie(true);
+
+      var accessToken = null;
+      var cClient_id = getCookie('client_id');
+      var currentAccessToken = getCookie('amazon_Login_accessToken')
+      if (cClient_id != client_id) {
+        logout();
+      } else {
+        accessToken = currentAccessToken;
+      }
+
+
       if (accessToken) {
         amazon.Login.retrieveProfile(accessToken, function (response){
           if (response.success) {
@@ -93,7 +91,7 @@
             <div id="addressBookWidgetDiv" style="height:200px"></div>
             <script type="text/javascript">
                 new OffAmazonPayments.Widgets.AddressBook({
-                  sellerId: "A23YM23UEBY8FM",
+                  sellerId: seller_id,
                 onOrderReferenceCreate: function (orderReference) {
                   document.getElementById('orderReferenceId').innerHTML =
                  orderReference.getAmazonOrderReferenceId();
@@ -108,15 +106,14 @@
                   // your error handling code
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());
-                  if (error.getErrorCode() == 'BuyerSessionExpired') {
-                    console.log('logout');
-                    amazon.Login.logout();
-                  }
+                  // if (error.getErrorCode() == 'BuyerSessionExpired') {
+                  //   console.log('logout');
+                  //   amazon.Login.logout();
+                  // }
                 }
               }).bind("addressBookWidgetDiv");
             </script>
           </div>
-
           <div class="col-md-6">
             <div id="walletWidgetDiv" style="height:200px" ng-show="orderReferenceId"></div>
             <script type="text/javascript">
@@ -129,12 +126,12 @@
                 },
                 onError: function (error) {
                   // your error handling code
+                  // if (error.getErrorCode() == 'BuyerSessionExpired') {
+                  //   console.log('logout');
+                  //   amazon.Login.logout();
+                  // }
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());
-                  if (error.getErrorCode() == 'BuyerSessionExpired') {
-                    console.log('logout');
-                    amazon.Login.logout();
-                  }
                 }
                 }).bind("walletWidgetDiv");
             </script>
@@ -142,6 +139,7 @@
         </div>
     </div>
   </div>
+
 
   <script type="text/javascript">
     var authRequest;
@@ -152,18 +150,16 @@
         var loginOptions = {
           scope: "profile postal_code payments:widget payments:shipping_address",
           response_type: 'token',
-          state: "path=/shop/02",
+          state: "path=/shop/02&client_id=" + client_id,
           interactive: 'always',
           popup: flg
         };
-
         authRequest = amazon.Login.authorize (loginOptions, "/shop/callback.html");
       }
     });
-    document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
-      amazon.Login.logout();
-      // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-      window.location.href = "/shop/02/index.html";
+    document.getElementById('AmazonLogoutButton').addEventListener("click", function() {
+      logout();
+      location.href = '/shop/02';
     });
   </script>
 </body>

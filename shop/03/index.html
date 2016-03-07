@@ -151,7 +151,7 @@
         var loginOptions = {
           scope: "profile postal_code payments:widget payments:shipping_address",
           response_type: 'token',
-          state: "path=/shop/03",
+          state: "path=/shop/03&client_id=" + client_id,
           interactive: 'always',
           popup: flg
         };
