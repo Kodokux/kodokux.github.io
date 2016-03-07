@@ -116,7 +116,7 @@
               }).bind("addressBookWidgetDiv");
             </script>
           </div>
-          
+
           <div class="col-md-6">
             <div id="walletWidgetDiv" style="height:200px" ng-show="orderReferenceId"></div>
             <script type="text/javascript">
@@ -150,7 +150,7 @@
       authorization: function() {
         var flg = document.getElementById("popupFlg").checked;
         var loginOptions = {
-          scope: "profile postal_code",
+          scope: "profile postal_code payments:widget payments:shipping_address",
           response_type: 'token',
           state: "path=/shop/02",
           interactive: 'always',

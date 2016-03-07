@@ -149,7 +149,7 @@
       authorization: function() {
         var flg = document.getElementById("popupFlg").checked;
         var loginOptions = {
-          scope: "profile postal_code",
+          scope: "profile postal_code payments:widget payments:shipping_address",
           response_type: 'token',
           state: "path=/shop/03",
           interactive: 'always',
@@ -164,6 +164,6 @@
       window.location.href = "/shop/03/index.html";
     });
   </script>
-  
+
 </body>
 </html>
