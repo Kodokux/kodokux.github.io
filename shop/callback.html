@@ -19,9 +19,10 @@
   }
 
   if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
-    document.cookie = "amazon_Login_accessToken=" + accessToken +";path="+path+";secure";
+    document.cookie = "amazon_Login_accessToken=" + accessToken +";secure";
     console.log('path', path, "amazon_Login_accessToken=" + accessToken +";path="+path+";secure");
-    location.href = path;
+    //location.href = path;
+    window.location.replace(path);
   } else {
     accessToken = getURLParameter("access_token", location.href);
   }
