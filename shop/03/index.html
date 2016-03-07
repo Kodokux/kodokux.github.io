@@ -13,6 +13,8 @@
   integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
   <script type="text/javascript">
+    var client_id = 'amzn1.application-oa2-client.427e81d929c949e9bec88e9d361e7523';
+    var seller_id = 'A3AJUANNYYEAOJ';
     function getURLParameter(name, source) {
       console.log("getURLParameter", name, source);
       return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
@@ -27,7 +29,7 @@
     }
 
      window.onAmazonLoginReady = function() {
-      amazon.Login.setClientId('amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca');
+      amazon.Login.setClientId(client_id);
       amazon.Login.setRegion('APAC');
       amazon.Login.setLanguage('ja_JP');
       amazon.Login.setUseCookie(true);
@@ -42,12 +44,17 @@
         });
       }
     }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+      document.getElementById('client_id').innerHTML = client_id;
+      document.getElementById('seller_id').innerHTML = seller_id;
+    });
   </script>
 </head>
 <body>
   <!-- sandbox -->
   <script type='text/javascript'
-    src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?sellerId=A23YM23UEBY8FM'>
+    src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js'>
   </script>
   <!-- <script type='text/javascript'
     src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
@@ -55,7 +62,15 @@
   <div class="container">
     <div class="jumbotron">
         <h2 class="text-center">アマゾンペイメント、サンプルプログラム</h2>
-        <span>アドレス帳、お支払い方法を使ったサンプルプログラムです。</span>
+        <p>one SSL 複数ショップのテスト</p>
+        <div class="row">
+          <div class="col-md-6 text-right">
+            <h5>Client ID : <span id='client_id'></span></h5>
+          </div>
+          <div class="col-md-6">
+            <h5>Seller ID : <span id='seller_id'></span></h5>
+          </div>
+        </div>
         <div class="row">
           <div class="col-md-6 text-right">
             <div id="AmazonPayButton"></div>
@@ -100,7 +115,7 @@
             <div id="walletWidgetDiv" style="height:200px" ng-show="orderReferenceId"></div>
             <script type="text/javascript">
               new OffAmazonPayments.Widgets.Wallet({
-                sellerId: "A23YM23UEBY8FM",
+                sellerId: seller_id,
                 onPaymentSelect: function (orderReference) {
                 },
                 design: {
@@ -120,7 +135,7 @@
 
   <script type="text/javascript">
     var authRequest;
-    var win = OffAmazonPayments.Button("AmazonPayButton", "A23YM23UEBY8FM", {
+    var win = OffAmazonPayments.Button("AmazonPayButton", seller_id, {
       type: "LwA",
       authorization: function() {
         var flg = document.getElementById("popupFlg").checked;
@@ -130,13 +145,13 @@
           state: "johna:test",
           popup: flg
         };
-        authRequest = amazon.Login.authorize (loginOptions, "/index3.html");
+        authRequest = amazon.Login.authorize (loginOptions, "/shop/03/index.html");
       }
     });
     document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
       amazon.Login.logout();
       // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-      window.location.href = "/index3.html";
+      window.location.href = "/shop/03/index.html";
     });
   </script>
 </body>
