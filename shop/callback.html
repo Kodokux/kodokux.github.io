@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Callback処理</title>
+  <script>
+  function getURLParameter(name, source) {
+    console.log("getURLParameter", name, source);
+    return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+      '([^&]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+  }
+
+  var accessToken = getURLParameter("access_token", location.hash);
+  var state = getURLParameter("state", location.hash);
+  var path = getURLParameter("path", '#' + state);
+
+  if (typeof path !== 'string') {
+    path = '/';
+  }
+
+  if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+    document.cookie = "amazon_Login_accessToken=" + accessToken +";path="+path+";secure";
+    console.log('path', path, "amazon_Login_accessToken=" + accessToken +";path="+path+";secure");
+    location.href = path;
+  } else {
+    accessToken = getURLParameter("access_token", location.href);
+  }
+  </script>
+</head>
+<body>
+
+</body>
+</html>

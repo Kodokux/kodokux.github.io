@@ -142,10 +142,10 @@
         loginOptions = {
           scope: "profile postal_code",
           response_type: 'token',
-          state: "johna:test",
+          state: "path=/shop",
           popup: flg
         };
-        authRequest = amazon.Login.authorize (loginOptions, "/shop/01/index.html");
+        authRequest = amazon.Login.authorize (loginOptions, "/shop/callback.html");
       }
     });
     document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
