@@ -140,13 +140,14 @@
       type: "LwA",
       authorization: function() {
         var flg = document.getElementById("popupFlg").checked;
-        loginOptions = {
+        var loginOptions = {
           scope: "profile postal_code",
           response_type: 'token',
-          state: "johna:test",
-          popup: flg,
-          interactive: 'always'
+          state: "path=/shop/02",
+          interactive: 'always',
+          popup: flg
         };
+
         authRequest = amazon.Login.authorize (loginOptions, "/shop/02/index.html");
       }
     });
