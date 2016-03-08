@@ -106,10 +106,10 @@
                   // your error handling code
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());
-                  // if (error.getErrorCode() == 'BuyerSessionExpired') {
-                  //   console.log('logout');
-                  //   amazon.Login.logout();
-                  // }
+                  if (error.getErrorCode() == 'BuyerSessionExpired') {
+                    console.log('logout');
+                    amazon.Login.logout();
+                  }
                 }
               }).bind("addressBookWidgetDiv");
             </script>
@@ -126,10 +126,10 @@
                 },
                 onError: function (error) {
                   // your error handling code
-                  // if (error.getErrorCode() == 'BuyerSessionExpired') {
-                  //   console.log('logout');
-                  //   amazon.Login.logout();
-                  // }
+                  if (error.getErrorCode() == 'BuyerSessionExpired') {
+                    console.log('logout');
+                    amazon.Login.logout();
+                  }
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());
                 }
