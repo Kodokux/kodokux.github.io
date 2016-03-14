@@ -86,7 +86,7 @@
             <h4>OrderReferenceId <span id='orderReferenceId'></span></h4>
           </div>
         </div>
-        <div class="row">
+        <div class="row" id='widgets'>
           <div class="col-md-6">
             <div id="addressBookWidgetDiv" style="height:200px"></div>
             <script type="text/javascript">
@@ -107,8 +107,8 @@
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());
                   if (error.getErrorCode() == 'BuyerSessionExpired') {
-                    console.log('logout');
                     amazon.Login.logout();
+                    displayWigets('none');
                   }
                 }
               }).bind("addressBookWidgetDiv");
@@ -129,6 +129,7 @@
                   if (error.getErrorCode() == 'BuyerSessionExpired') {
                     console.log('logout');
                     amazon.Login.logout();
+                    displayWigets('none');
                   }
                   console.log(error.getErrorCode());
                   console.log(error.getErrorMessage());

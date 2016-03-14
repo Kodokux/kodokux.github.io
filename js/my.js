@@ -28,3 +28,7 @@ function logout() {
   document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
   document.cookie = "amazon_Login_state_cache=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
 }
+
+function displayWigets(displayType) {
+  document.getElementById('widgets').style.display = displayType;
+}
