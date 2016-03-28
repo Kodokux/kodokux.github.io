@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>アドレス帳、お支払い方法 | アマゾンペイメント、サンプルプログラム | Amazon Payments (Sandbox)</title>
+  <title>アドレス帳、お支払い方法 | アマゾンペイメント、サンプルプログラム | Amazon Payments</title>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
   integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -46,15 +46,15 @@
 </head>
 <body>
   <!-- sandbox -->
-  <script type='text/javascript'
-    src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?sellerId=A23YM23UEBY8FM'>
-  </script>
   <!-- <script type='text/javascript'
-    src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
+    src='https://origin-na.ssl-images-amazon.com/images/G/09/EP/offAmazonPayments/sandbox/prod/lpa/js/Widgets.js?sellerId=A23YM23UEBY8FM'>
   </script> -->
+  <script type='text/javascript'
+    src='https://static-fe.payments-amazon.com/OffAmazonPayments/jp/lpa/js/Widgets.js'>
+  </script>
   <div class="container">
     <div class="jumbotron">
-        <h2 class="text-center">アマゾンペイメント、サンプルプログラム</h2>
+        <h2 class="text-center">アマゾンペイメント、サンプルプログラム (本番)</h2>
         <span>アドレス帳、お支払い方法を使ったサンプルプログラムです。</span>
         <div class="row">
           <div class="col-md-6 text-right">
@@ -81,20 +81,6 @@
                 onOrderReferenceCreate: function (orderReference) {
                   document.getElementById('orderReferenceId').innerHTML =
                  orderReference.getAmazonOrderReferenceId();
-                 new OffAmazonPayments.Widgets.Wallet({
-                   sellerId: "A23YM23UEBY8FM",
-                   amazonOrderReferenceId: orderReference.getAmazonOrderReferenceId(),
-                   onPaymentSelect: function (orderReference) {
-                   },
-                   design: {
-                       designMode: 'responsive'
-                   },
-                   onError: function (error) {
-                     // your error handling code
-                     console.log(error.getErrorCode());
-                     console.log(error.getErrorMessage());
-                   }
-                   }).bind("walletWidgetDiv");
                 },
                 onAddressSelect: function (orderReference) {
                   console.log("onAddressSelect:orderReference", orderReference)
@@ -112,6 +98,21 @@
           </div>
           <div class="col-md-6">
             <div id="walletWidgetDiv" style="height:200px" ng-show="orderReferenceId"></div>
+            <script type="text/javascript">
+              new OffAmazonPayments.Widgets.Wallet({
+                sellerId: "A23YM23UEBY8FM",
+                onPaymentSelect: function (orderReference) {
+                },
+                design: {
+                    designMode: 'responsive'
+                },
+                onError: function (error) {
+                  // your error handling code
+                  console.log(error.getErrorCode());
+                  console.log(error.getErrorMessage());
+                }
+                }).bind("walletWidgetDiv");
+            </script>
           </div>
         </div>
     </div>
@@ -129,13 +130,13 @@
           state: "johna:test",
           popup: flg
         };
-        authRequest = amazon.Login.authorize (loginOptions, "/index3.html");
+        authRequest = amazon.Login.authorize (loginOptions, "/index4.html");
       }
     });
     document.getElementById('AmazonLogoutButton').addEventListener("click", function () {
       amazon.Login.logout();
       // document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-      window.location.href = "/index3.html";
+      window.location.href = "/index4.html";
     });
   </script>
 </body>
